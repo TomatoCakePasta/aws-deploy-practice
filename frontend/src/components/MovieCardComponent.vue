@@ -1,4 +1,6 @@
 <script setup lang="ts">
+    import { useRouter } from 'vue-router'
+
     interface Movie {
         id: number
         title: string
@@ -11,6 +13,12 @@
     defineProps<{
         movie: Movie
     }>()
+
+    const router = useRouter();
+
+    function goSelectSeatPage(id: number) {
+        router.push(`/select-seat/${id}`);
+    }
 </script>
 
 
@@ -39,7 +47,7 @@
                     <p v-else-if="movie.seat > 15">△</p>
                     <p v-else-if="movie.seat === 0">×</p>
                 </div>
-                <button class="btn" :disabled="movie.seat <= 0">
+                <button class="btn" @click="goSelectSeatPage(movie.id)" :disabled="movie.seat <= 0">
                     予約
                 </button>
             </div>
@@ -101,5 +109,13 @@ img {
     width: 100px;
     height: 100px;
     font-size: 25px;
+    background-color: aliceblue;
+    border-radius: 10px;
+}
+
+.btn:hover {
+  background-color:rgb(196, 198, 200);
+  transition-duration: 0.15s;
+  cursor: pointer;
 }
 </style>

@@ -28,12 +28,12 @@
 .btn {
   font-size: 100px;
   padding: 10px 180px;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: aliceblue;
 }
 
 .btn:hover {
-  background-color:rgb(86, 128, 140);
+  background-color:rgb(48, 135, 212);
   color: white;
   transition-duration: 0.15s;
   cursor: pointer;

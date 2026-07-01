@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import MovieCardComponent from "@/components/MovieCardComponent.vue";
-import { ref } from "vue";
+    import { ref } from "vue";
 
     const movies = ref([
         {id: 1, title: "劇場版 HOGEHOGE", schedule: "MM:HH", endTime: "HH:MM", seat: 100, imageUrl: "src/assets/movie.png"},
