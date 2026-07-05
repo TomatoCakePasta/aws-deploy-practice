@@ -4,8 +4,16 @@
 
 ```
 // frontend
-npm install
+~/frontend % npm install
 
 // run 
-npm run dev
+~/frontend % npm run dev
+
+// build
+~/frontend % npm run build
+```
+
+```
+// backend
+~/backend % node src/app.ts
 ```
