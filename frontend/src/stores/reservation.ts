@@ -17,7 +17,11 @@ export const userReservationState = defineStore("reservation", () => {
 
     // Getter
     const totalTickets = computed(() => {
-        return ticketTypes.value.adult + ticketTypes.value.child;
+        return ticketTypes.value["adult"] + ticketTypes.value["child"];
+    });
+
+    const totalSelectedSeats = computed(() => {
+        return selectedSeats.value.length;
     });
 
     // Actions
@@ -29,13 +33,16 @@ export const userReservationState = defineStore("reservation", () => {
         return movieId.value;
     });
 
+    function getTotalAmount(): number {
+        return ticketTypes.value["adult"] * 1500 + ticketTypes.value["child"] * 1000;
+    }
+
     function setSelectedSeats(seats: Seat[]) {
         selectedSeats.value = seats;
     }
 
-    function setTicketTypes(adult: number, child: number) {
-        ticketTypes.value.adult = adult;
-        ticketTypes.value.child = child;
+    function setTicketTypes(type: "adult" | "child", count: number) {
+        ticketTypes.value[type] = count;
     }
 
     function resetReservation() {
@@ -47,15 +54,22 @@ export const userReservationState = defineStore("reservation", () => {
         };
     }
 
+    function isTicketCountValid(): boolean {
+        return totalTickets.value == totalSelectedSeats.value;
+    }
+
     return {
         movieId,
         selectedSeats,
         ticketTypes,
         totalTickets,
+        getMovieId,
+        totalSelectedSeats,
         setMovieId,
         setSelectedSeats,
         setTicketTypes,
         resetReservation,
-        getMovieId,
+        isTicketCountValid,
+        getTotalAmount,
     };
 });

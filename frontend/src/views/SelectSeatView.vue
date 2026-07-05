@@ -1,7 +1,13 @@
 <script setup lang="ts">
     import MovieCardComponent from "@/components/MovieCardComponent.vue";
     import SeatCardComponent from "@/components/SeatCardComponent.vue";
+    import { userReservationState } from "@/stores/reservation";
     import { ref } from "vue";
+    import { useRouter, useRoute } from "vue-router";
+
+    const router = useRouter();
+    const route = useRoute();
+    const reservationStore = userReservationState();
 
     const row = ref(11);
     const col = ref(18);
@@ -13,6 +19,10 @@
     }
 
     const reservedSeats = ref<Seat[]>([]);
+
+    const movieId: string = route.params.id as string;
+    reservationStore.setMovieId(movieId);
+
 
     function onAddSeats(row: number, col: number): void {
         if (isSelected(row, col)) {
@@ -43,6 +53,11 @@
             return a.col - b.col
         })
     }
+
+    function onSelectTicketType() {
+        reservationStore.setSelectedSeats(reservedSeats.value);
+        router.push("/ticket-type");
+    }
 </script>
 
 <template>
@@ -72,7 +87,7 @@
                     />
                  </div>
                  <div class="footer">
-                    <button :disabled="reservedSeats.length <= 0" class="buy-btn">購入</button>
+                    <button :disabled="reservedSeats.length <= 0" class="buy-btn" @click="onSelectTicketType">購入</button>
                  </div>
             </div>
         </div>
