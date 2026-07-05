@@ -4,6 +4,7 @@ import SelectMovieView from '@/views/SelectMovieView.vue'
 import SelectSeatView from '@/views/SelectSeatView.vue'
 import TicketTypeView from '@/views/TicketTypeView.vue'
 import ReservationConfirmView from '@/views/ReservationConfirmView.vue'
+import TicketPrintView from '@/views/TicketPrintView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,11 +34,11 @@ const router = createRouter({
       name: "reservation-confirm",
       component: ReservationConfirmView,
     },
-    // {
-    //   path: "/ticket-print",
-    //   name: "ticket-print",
-    //   component: TicketPrintView,
-    // }
+    {
+      path: "/ticket-print",
+      name: "ticket-print",
+      component: TicketPrintView,
+    }
   ],
 })
 

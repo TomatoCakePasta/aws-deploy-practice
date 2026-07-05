@@ -24,22 +24,19 @@ import TicketTypeView from "./TicketTypeView.vue";
         total.value = reservationStore.getTotalAmount();
     }
 
-    function onGoToConfirmPage() {
-        if (!reservationStore.isTicketCountValid()) {
-            alert(`合計枚数が${reservationStore.totalSelectedSeats}枚になるように選択してください`);
-            return;
-        }
-
-        router.push("/ticket-print");
+    function onGoToTopPage() {
+        router.push("/");
     }
-
 
 </script>
 <template>
 <div class="type-area">
-    <h1 class="title">確認画面</h1>
+    <h1 class="title">発券画面</h1>
     <div class="movie-content">
-        <img :src="movie.imageUrl">
+        <div>
+            <img src="../assets/QR.png">
+            <p class="text">こちらのQRでコードで<br>全員入場できます</p>
+        </div>
         <div class="movie-text">
             <p class="type-text">{{ movie.title }}</p>
             <p class="sub-info">{{ movie.schedule }}-{{ movie.endTime }}</p>
@@ -57,7 +54,7 @@ import TicketTypeView from "./TicketTypeView.vue";
         <p class="ammount-text">¥{{  reservationStore.getTotalAmount() }}</p>
     </div>
     <div class="submit-area">
-        <button @click="onGoToConfirmPage()" class="confirm-btn">発券</button>
+        <button @click="onGoToTopPage()" class="end-btn">タイトルに戻る</button>
     </div>
 </div>
 <!-- エラーメッセージ: 合計枚数がNになるように選択してください -->
@@ -72,8 +69,14 @@ import TicketTypeView from "./TicketTypeView.vue";
     color:rgb(31, 31, 31);
 }
 
+.text {
+    color: rgb(31, 31, 31);
+    margin: 0px 10px;
+}
+
 img {
-    width: 100px;
+    width: 150px;
+    height: 150px;
     margin: 10px;
 }
 
@@ -139,7 +142,7 @@ img {
     justify-content: center;
 }
 
-.confirm-btn {
+.end-btn {
     background-color: rgb(48, 135, 212);
     margin: 10px;
     width: 80%;
