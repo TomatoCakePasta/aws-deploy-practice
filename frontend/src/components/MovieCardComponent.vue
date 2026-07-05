@@ -1,5 +1,8 @@
 <script setup lang="ts">
     import { useRouter } from 'vue-router'
+    import { userReservationState } from '@/stores/reservation'
+
+    const reservationStore = userReservationState();
 
     interface Movie {
         id: number
@@ -10,13 +13,14 @@
         imageUrl: string
     }
 
-    defineProps<{
+    const props = defineProps<{
         movie: Movie
     }>()
 
     const router = useRouter();
 
     function goSelectSeatPage(id: number) {
+        reservationStore.setSelecteMovie(props.movie);
         router.push(`/select-seat/${id}`);
     }
 </script>
