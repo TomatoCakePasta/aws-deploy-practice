@@ -72,7 +72,7 @@
                     />
                  </div>
                  <div class="footer">
-                    <button :disabled="reservedSeats.length <= 0" class="btn">購入</button>
+                    <button :disabled="reservedSeats.length <= 0" class="buy-btn">購入</button>
                  </div>
             </div>
         </div>
@@ -126,10 +126,9 @@ td.selected {
 }
 
 .cart-area {
-    background-color:aliceblue;
+    background-color:rgb(231, 238, 245);
     margin: 0px 10px;
     height: 100%;
-
     display: flex;
     flex-direction: column;
 }
@@ -145,13 +144,21 @@ td.selected {
     display: flex;
 }
 
-.btn {
+.buy-btn {
     align-items: center;
-    background-color: blue;
+    background-color: rgb(48, 135, 212);
     margin: 10px;
     width: 800px;
     height: 60px;
-    color:aliceblue;
+    font-weight: bold;
+    border-radius: 10px;
+    color:rgb(255, 255, 255);
     font-size: xx-large;
+}
+
+.buy-btn:hover {
+    background-color: rgb(26, 76, 120);
+    color:aliceblue;
+    transition-duration: 0.15s;
 }
 </style>
