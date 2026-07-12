@@ -8,7 +8,7 @@
 
     onMounted(async () => {
         try {
-            const res = await axios.get("http://localhost:3000/movie-list");
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/movie-list`);
             movies.value = res.data;
             console.log(res.data);
         }
