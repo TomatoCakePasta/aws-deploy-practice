@@ -54,7 +54,6 @@ scp -i "key-pair-name.pem" -r ./backend ec2-user@<public-dns>:~/apps/
 
 # GitHub ActionsからS3への自動デプロイ手順
 ## 大まかな流れ
-## 1. GitHub Actions → IAMロール【信頼ポリシー】
 ```
 GitHub Actions
       │
@@ -75,6 +74,41 @@ IAMロールを使用可能
 S3へ操作
 
 ```
+
+<details>
+	<summary>詳細</summary>
+	
+```
+GitHub Actions
+      │
+      │ OIDC認証
+      ▼
+認証されたGitHub Actionsの
+アイデンティティ
+      │
+      │ GitHub Actionsの認証されたアイデンティティが
+      │ IAMロールを引き受ける
+      ▼
+IAMロール
+  ├─ 信頼ポリシー
+  │    └─ GitHub Actionsを信頼
+  │
+  └─ 許可ポリシー
+       └─ S3操作を許可 (読み取り, アップロード, 削除)
+              │
+              ▼
+             S3
+              ▲
+              │
+        バケットポリシー (s3:GetObject, 誰でも見れるよ!)
+              ▲
+              │
+       Client（ブラウザ）
+```
+</details>
+
+<details>
+<summary>図にしてみた場合</summary>
 
 ```
 ┌──────────────────────┐
@@ -111,34 +145,7 @@ S3へ操作
           │    S3     │
           └───────────┘
 ```
-
-```
-GitHub Actions
-      │
-      │ OIDC認証
-      ▼
-認証されたGitHub Actionsの
-アイデンティティ
-      │
-      │ GitHub Actionsの認証されたアイデンティティが
-      │ IAMロールを引き受ける
-      ▼
-IAMロール
-  ├─ 信頼ポリシー
-  │    └─ GitHub Actionsを信頼
-  │
-  └─ 許可ポリシー
-       └─ S3操作を許可 (読み取り, アップロード, 削除)
-              │
-              ▼
-             S3
-              ▲
-              │
-        バケットポリシー (s3:GetObject, 誰でも見れるよ!)
-              ▲
-              │
-       Client（ブラウザ）
-```
+</details>
 
 # S3の作成
 - region: ap-northeast-1
