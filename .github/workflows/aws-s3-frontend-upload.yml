@@ -1,0 +1,57 @@
+name: AWWS S3 Frontend Upload with OpenID Connect
+on: 
+  push:
+    # When merged into the “main” branch, the workflow begins
+    branches:
+      - main
+    paths: 
+      # Only if the `frontend` folder has been modified
+      - 'frontend/**'
+
+env:
+  # define environment variables to input parameter for AWS authentification actions
+  ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ID }}:role/${{ secrets.ROLE_NAME }}
+  SESSION_NAME: gh-oidc-${{ github.run_id }}-${{ github.run_attempt }}
+  # folder path
+  SOURCE_DIR: frontend/dist
+  # S3 bucket name
+  DEV_AWS_S3_BUCKET: s3-demo-movie-system
+
+jobs:
+  uploadjob:
+    runs-on: ubuntu-latest
+    permissions:
+      # permission get OIDC token
+      id-token: write
+    steps:
+      - name: checkout
+        # “Checkout” is the process of copying source code from a repository to a workflow environment.
+        uses: actions/checkout@v7
+
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend
+
+      - name: Build
+        run: npm run build
+        working-directory: ./frontend
+
+      - name: list checkoutfiles
+        run: |
+          pwd
+          ls -al ./${{ env.SOURCE_DIR }}
+
+      - name: connect aws
+      # AWS's authentification actions
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.ROLE_ARN }}
+          role-session-name: ${{ env.SESSION_NAME }}
+          aws-region: ap-northeast-1
+
+      - name: deploy S3
+        run: aws s3 sync ${{ env.SOURCE_DIR }} s3://${{ env.DEV_AWS_S3_BUCKET }} --exact-timestamps --delete
+
+      - name: check S3 objects
+        run: aws s3 ls s3://${{ env.DEV_AWS_S3_BUCKET }} 
