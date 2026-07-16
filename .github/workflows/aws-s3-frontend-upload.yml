@@ -28,6 +28,12 @@ jobs:
         # “Checkout” is the process of copying source code from a repository to a workflow environment.
         uses: actions/checkout@v7
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: npm install
