@@ -25,7 +25,7 @@ const dummyMovies: Movie[] = [
 ];
 
 app.get("/", (req: Request, res: Response) => {
-    res.send("Hello World !");
+    res.send("Hello World !!!!");
 });
 
 app.listen(PORT, () => {
