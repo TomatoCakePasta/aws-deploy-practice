@@ -241,3 +241,39 @@ IAMロール
 }
 ```
 **「解説用コメント(#)は削除すること, JSONファイルにコメントは記入不可のため」**
+
+```
+GitHub
+  │
+  │ mainへpush
+  ▼
+GitHub Actions
+  │
+  ├─ backend/をZIP化
+  │
+  ├─ OIDCでAWS IAM Roleを引き受ける
+  │
+  ├─ S3へアップロード
+  │    └─ backend-コミットハッシュ.zip
+  │
+  └─ aws deploy create-deployment
+           │
+           ▼
+      CodeDeploy
+           │
+           ▼
+      S3からZIPを取得
+           │
+           ▼
+      EC2へデプロイ
+           │
+           ▼
+      appspec.ymlを実行
+           │
+           ▼
+      install_dependencies.sh
+      start_application.shを実行
+           │
+           ▼
+      Node.jsアプリ再起動
+```
