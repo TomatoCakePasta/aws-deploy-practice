@@ -81,9 +81,6 @@ jobs:
       - name: Create CodeDeploy deployment
         run: |
           aws deploy create-deployment \
-            --application-name ${{ env.CODEDEPLOY_APPLICATION_NAME }} \
-            --deployment-group-name ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP_NAME }} \
-            --s3-location \
-              bucket=${{ env.DEV_AWS_S3_BUCKET }}, \
-              key=${{ env.PACKAGE_NAME }}, \
-              bundleType=zip
+            --application-name "${{ env.CODEDEPLOY_APPLICATION_NAME }}" \
+            --deployment-group-name "${{ env.CODEDEPLOY_DEPLOYMENT_GROUP_NAME }}" \
+            --s3-location "bucket=${{ env.DEV_AWS_S3_BUCKET }},key=${{ env.PACKAGE_NAME }},bundleType=zip"
