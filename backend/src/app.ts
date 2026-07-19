@@ -37,3 +37,8 @@ app.get("/movie-list", (req: Request, res: Response) => {
     res.json(dummyMovies);
     console.log("response sent");
 });
+
+app.get("/sample", (req: Request, res: Response) => {
+    console.log("GET: sample");
+    res.send("This is Sample API !!!!");
+})
