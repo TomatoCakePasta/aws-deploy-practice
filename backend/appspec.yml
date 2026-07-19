@@ -8,6 +8,10 @@ files:
 
 hooks:
   AfterInstall:
+    - location: scripts/set_permissions.sh
+      timeout: 300
+      runas: root
+
     - location: scripts/install_dependencies.sh
       timeout: 300
       runas: ec2-user
