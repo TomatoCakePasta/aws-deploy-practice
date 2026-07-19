@@ -1,0 +1,89 @@
+name: AWS S3 Backend Upload with OpenID Connect
+on: 
+  push:
+    # When merged into the “main” branch, the workflow begins
+    branches:
+      - main
+    paths: 
+      # Only if the `frontend` folder has been modified
+      - 'backend/**'
+
+env:
+  # define environment variables to input parameter for AWS authentification actions
+  ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ID }}:role/${{ secrets.ROLE_NAME }}
+
+  # GitHub Actions session name
+  SESSION_NAME: gh-oidc-${{ github.run_id }}-${{ github.run_attempt }}
+
+  AWS_REGION: ap-northeast-1
+
+  # S3 bucket name
+  DEV_AWS_S3_BUCKET: s3-demo-movie-system
+
+  # Deployment package name
+  PACKAGE_NAME: backend-${{ github.sha }}.zip
+
+  CODEDEPLOY_APPLICATION_NAME: Auto-Deploy-EC2
+
+  CODEDEPLOY_DEPLOYMENT_GROUP_NAME: backend
+
+
+
+jobs:
+  uploadjob:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # GitHub repository checkout
+      content: read
+
+      # permission get OIDC token
+      id-token: write
+
+    steps:
+      - name: checkout
+        # “Checkout” is the process of copying source code from a repository to a workflow environment.
+        uses: actions/checkout@v7
+
+      - name: Create deployment package
+        run: |
+          cd backend
+
+          zip -r ../${{ env.PACKAGE_NAME }} . \
+            -x "node_modules/*" \
+            -x ".git/*"
+
+      - name: list checkoutfiles
+        run: |
+          pwd
+          ls -lh ./${{ env.PACKAGE_NAME }}
+
+      - name: connect aws
+      # AWS's authentification actions
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.ROLE_ARN }}
+          role-session-name: ${{ env.SESSION_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Upload ZIP to S3
+      - name: Upload deployment package to S3
+        run: |
+          aws s3 cp \
+            ${{ env.PACKAGE_NAME }} \
+            s3://${{ env.DEV_AWS_S3_BUCKET }}/${{ env.PACKAGE_NAME }}
+
+      # Check S3 object
+      - name: check S3 objects
+        run: |
+          aws s3 ls s3://${{ env.DEV_AWS_S3_BUCKET }}/
+
+      - name: Create CodeDeploy deployment
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ env.CODEDEPLOY_APPLICATION_NAME }} \
+            --deployment-group-name ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP_NAME }} \
+            --s3-location \
+              bucket=${{ env.DEV_AWS_S3_BUCKET }}, \
+              key=${{ env.PACKAGE_NAME }}, \
+              bundleType=zip
