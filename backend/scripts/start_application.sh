@@ -1,10 +1,14 @@
 #!/bin/bash
 
+export NVM_DIR="/home/ec2-user/.nvm"
+
+source "$NVM_DIR/nvm.sh"
+
+nvm use 22
+
 cd /home/ec2-user/backend
 
 pkill -f "node src/app.ts" || true
 
-# continue process after disconnecting ssh
-# store Node.js log to as app.log file
 nohup node src/app.ts \
   > /home/ec2-user/backend/app.log 2>&1 &
