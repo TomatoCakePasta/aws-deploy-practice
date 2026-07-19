@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+
+files:
+  # Copy the ZIP file located in the root directory retrieved by Code Deploy to the destination
+  - source: /
+    destination: /home/ec2-user/backend
+
+hooks:
+  AfterInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 300
+      runas: ec2-user
+
+  ApplicationStart:
+    - location: scripts/start_application.sh
+      timeout: 300
+      runas: ec2-user
